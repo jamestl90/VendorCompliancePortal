@@ -4,7 +4,7 @@ obj/
 
 # User-specific IDE files
 .vs/
-.vscode/*.user
+/.vscode/
 *.suo
 *.user
 *.userosscache
