@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    name: Restore, build, and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore VendorCompliancePortal.slnx
+
+      - name: Build
+        run: dotnet build VendorCompliancePortal.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test VendorCompliancePortal.slnx --configuration Release --no-build --verbosity normal
