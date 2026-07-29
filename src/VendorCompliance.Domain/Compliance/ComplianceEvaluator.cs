@@ -23,20 +23,18 @@ public sealed class ComplianceEvaluator
 
         foreach (var req in requirements)
         {
-            // Check if this requirement type exists in vendor documents
             var vendorDoc = vendor.Documents.FirstOrDefault(x => x.Type == req.Type);
 
-            if (vendorDoc == null) // didn't exist, add failure for missing
+            if (vendorDoc == null) 
             {   
                 failures.Add(new ComplianceFailure(ComplianceFailureReason.Missing, req.Type));
             }
-            else if (vendorDoc.ExpiresOn < assessedOn) // passed expiry, add failure for expiry
+            else if (vendorDoc.ExpiresOn < assessedOn) 
             {
                 failures.Add(new ComplianceFailure(ComplianceFailureReason.Expired, req.Type));
             }
         }
 
-        // create the assessment 
         ComplianceAssessment complianceAssessment = new ComplianceAssessment(vendor.Id, assessedOn, failures);
 
         return complianceAssessment;
