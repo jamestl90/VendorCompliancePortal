@@ -3,13 +3,13 @@ using VendorCompliance.Domain.Compliance;
 using VendorCompliance.Prototype.SampleData;
 
 var demoVendor = DemoData.CreateWestlineVendor();
-var demoReq = DemoData.CreateRequirements();
-var assessmentDate = new DateOnly(2026, 7, 25);
+var requirements = DemoData.CreateRequirements();
+var assessedOn = new DateOnly(2026, 7, 25);
 
 var evaluator = new ComplianceEvaluator();
 var useCase = new AssessVendorCompliance(evaluator);
 
-ComplianceAssessment assessmentResult = useCase.Execute(demoVendor, demoReq, assessmentDate);
+ComplianceAssessment assessmentResult = useCase.Execute(demoVendor, requirements, assessedOn);
 Console.WriteLine("Vendor: {0}\nAssessment Date: {1:d MMMM yyyy}\nCompliant: {2}", demoVendor.Name,
 assessmentResult.AssessedOn, assessmentResult.IsCompliant ? "Yes" : "No");
 
@@ -29,7 +29,7 @@ foreach (var failure in assessmentResult.Failures)
             type = "Workers Compensation";
             break;
         default:
-            type = "No reason specified";
+            type = "Unknown document type.";
             break;
     }
     Console.WriteLine("Failure {0}: Type: {1} - Reason: {2}", i, type, failure.Reason);
