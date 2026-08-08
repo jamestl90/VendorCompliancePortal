@@ -41,7 +41,8 @@ VendorCompliance.Tests      ->  VendorCompliance.Domain
   behavior without reimplementing business rules.
 - `VendorCompliance.Prototype` is the current composition root and executable
   host used to exercise the application with deterministic demo data.
-- `VendorCompliance.Tests` verifies Domain and Application behavior with xUnit.
+- `VendorCompliance.Tests` references Domain and Application and currently
+  verifies the compliance rules with xUnit.
 
 Expected business failures are returned as a `ComplianceAssessment` containing
 `IsCompliant` and explainable failure records. Invalid method inputs are rejected
@@ -55,11 +56,11 @@ system clock, which keeps tests and CI runs repeatable.
 | Area | Technology and practice |
 | --- | --- |
 | Runtime and language | .NET 10, C#, SDK-style projects, nullable reference types, implicit global usings |
-| Solution structure | XML-based `.slnx` solution, modular-monolith project boundaries, dependency inversion toward Domain |
-| Domain design | Encapsulated business rules, result-oriented error handling, immutable/read-only result collections, deterministic date handling |
-| Automated testing | xUnit, Microsoft.NET.Test.Sdk, xUnit Visual Studio runner, Coverlet collector |
+| Solution structure | XML-based `.slnx` solution, modular-monolith project boundaries, layered architecture with dependencies directed toward Domain |
+| Domain design | Encapsulated business rules, constructor injection, LINQ, result-oriented error handling, read-only result collections, deterministic date handling |
+| Automated testing | xUnit, Microsoft.NET.Test.Sdk, xUnit Visual Studio runner, Coverlet collector, Arrange/Act/Assert tests |
 | Continuous integration | GitHub Actions on Ubuntu: restore, Release build, and test on pushes and pull requests to `main`, plus manual runs |
-| Source control | Git feature branches, pull-request workflow, CI-gated merge process |
+| Source control | Git feature branches and a pull-request workflow with CI checks before merge |
 
 ### Planned and not yet implemented
 
