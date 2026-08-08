@@ -1,3 +1,7 @@
+# Purpose
+
+To keep myself up to date with the latest in .net applications development I've come up with this project to work on from time to time. 
+
 # Vendor Compliance Portal
 
 A portfolio business application being built with modern .NET and Blazor for
