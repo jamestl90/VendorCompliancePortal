@@ -7,7 +7,7 @@ namespace VendorCompliance.Tests.Compliance;
 public class ComplianceEvaluatorTests
 {
     // helper to generate some document requirements 
-    public static IReadOnlyCollection<DocumentRequirement> CreateRequirements() =>
+    private static IReadOnlyCollection<DocumentRequirement> CreateRequirements() =>
     [
         new DocumentRequirement(DocumentType.PublicLiabilityInsurance),
         new DocumentRequirement(DocumentType.WorkersCompensationInsurance),
@@ -37,7 +37,7 @@ public class ComplianceEvaluatorTests
                     ));
         
         IReadOnlyCollection<DocumentRequirement> requirements = CreateRequirements();
-        DateOnly assessedOn = new DateOnly(2026, 8, 22);
+        DateOnly assessedOn = new DateOnly(2026, 8, 21);
 
         // act
         var result = evaluator.Evaluate(vendor, requirements, assessedOn);
@@ -88,13 +88,9 @@ public class ComplianceEvaluatorTests
                     DocumentType.PublicLiabilityInsurance,
                     new DateOnly(2026, 8, 19)
                     ));
-        vendor.SupplyDocument(new ComplianceDocument(
-                    Guid.NewGuid(),
-                    DocumentType.ElectricalContractorLicence,
-                    new DateOnly(2026, 8, 22)
-                    ));
-
-        IReadOnlyCollection<DocumentRequirement> requirements = CreateRequirements();
+        
+        DocumentRequirement reqOne = new DocumentRequirement(DocumentType.PublicLiabilityInsurance);
+        IReadOnlyCollection<DocumentRequirement> requirements = new List<DocumentRequirement>{ reqOne };
         DateOnly assessedOn = new DateOnly(2026, 8, 20);
 
         // act
@@ -104,7 +100,7 @@ public class ComplianceEvaluatorTests
         Assert.False(result.IsCompliant);
         Assert.Single(result.Failures);
         Assert.Equal(ComplianceFailureReason.Expired, result.Failures.ElementAt(0).Reason);
-        Assert.Equal(DocumentType.ElectricalContractorLicence, result.Failures.ElementAt(0).Type);
+        Assert.Equal(DocumentType.PublicLiabilityInsurance, result.Failures.ElementAt(0).Type);
     }
 
     [Fact]
@@ -113,6 +109,21 @@ public class ComplianceEvaluatorTests
         // setup
         ComplianceEvaluator evaluator = new ComplianceEvaluator();
         Vendor vendor = new Vendor(Guid.NewGuid(), "TestVendor1");
+        vendor.SupplyDocument(new ComplianceDocument(
+            Guid.NewGuid(),
+            DocumentType.PublicLiabilityInsurance,
+            new DateOnly(2026, 8, 22)
+            ));
+
+        DocumentRequirement requirement = new DocumentRequirement(DocumentType.PublicLiabilityInsurance);
+        IReadOnlyCollection<DocumentRequirement> requirements = new List<DocumentRequirement>{ requirement };
+
+        DateOnly assessedOn = new DateOnly(2026, 8, 22);
+
+        var result = evaluator.Evaluate(vendor, requirements, assessedOn);
+
+        Assert.True(result.IsCompliant);
+        Assert.Empty(result.Failures);
     }
 
     [Fact]
@@ -121,6 +132,30 @@ public class ComplianceEvaluatorTests
         // setup
         ComplianceEvaluator evaluator = new ComplianceEvaluator();
         Vendor vendor = new Vendor(Guid.NewGuid(), "TestVendor1");
+        vendor.SupplyDocument(new ComplianceDocument(
+                    Guid.NewGuid(),
+                    DocumentType.PublicLiabilityInsurance,
+                    new DateOnly(2026, 8, 22)
+                    ));
+        vendor.SupplyDocument(new ComplianceDocument(
+                    Guid.NewGuid(),
+                    DocumentType.ElectricalContractorLicence,
+                    new DateOnly(2026, 8, 22)
+                    ));
+        vendor.SupplyDocument(new ComplianceDocument(
+                    Guid.NewGuid(),
+                    DocumentType.WorkersCompensationInsurance,
+                    new DateOnly(2026, 8, 22)
+                    ));
+
+        IReadOnlyCollection<DocumentRequirement> requirements = new List<DocumentRequirement>();
+        DateOnly assessedOn = new DateOnly(2026, 8, 22);
+
+        var result = evaluator.Evaluate(vendor, requirements, assessedOn);
+
+        Assert.True(result.IsCompliant);
+        Assert.Empty(requirements);
+        Assert.Empty(result.Failures);
     }
 
     [Fact]
@@ -129,5 +164,35 @@ public class ComplianceEvaluatorTests
         // setup
         ComplianceEvaluator evaluator = new ComplianceEvaluator();
         Vendor vendor = new Vendor(Guid.NewGuid(), "TestVendor1");
+        vendor.SupplyDocument(new ComplianceDocument(
+                    Guid.NewGuid(),
+                    DocumentType.PublicLiabilityInsurance,
+                    new DateOnly(2026, 8, 22)
+                    ));
+        vendor.SupplyDocument(new ComplianceDocument(
+                    Guid.NewGuid(),
+                    DocumentType.ElectricalContractorLicence,
+                    new DateOnly(2026, 8, 25)
+                    ));
+
+        DocumentRequirement reqOne = new DocumentRequirement(DocumentType.PublicLiabilityInsurance);
+        DocumentRequirement reqTwo = new DocumentRequirement(DocumentType.WorkersCompensationInsurance);
+        DocumentRequirement reqThree = new DocumentRequirement(DocumentType.ElectricalContractorLicence);
+
+        IReadOnlyCollection<DocumentRequirement> requirements = new List<DocumentRequirement>
+        {
+            reqOne, reqTwo, reqThree
+        };
+
+        DateOnly assessedOn = new DateOnly(2026, 8, 23);
+
+        var results = evaluator.Evaluate(vendor, requirements, assessedOn);
+
+        Assert.False(results.IsCompliant);
+        Assert.Equal(2, results.Failures.Count);
+        Assert.NotNull(results.Failures.FirstOrDefault(x => x.Reason == ComplianceFailureReason.Missing && 
+                                                       x.Type == DocumentType.WorkersCompensationInsurance));
+        Assert.NotNull(results.Failures.FirstOrDefault(x => x.Reason == ComplianceFailureReason.Expired &&
+                                                        x.Type == DocumentType.PublicLiabilityInsurance));
     }
 }
