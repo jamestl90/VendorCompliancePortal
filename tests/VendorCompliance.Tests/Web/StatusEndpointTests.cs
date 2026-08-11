@@ -12,10 +12,9 @@ public sealed class StatusEndpointTests(WebApplicationFactory<Program> factory)
     public async Task GetStatus_ReturnsConfiguredApplicationDetails()
     {
         using HttpResponseMessage response = await _client.GetAsync("/api/status");
+        response.EnsureSuccessStatusCode();
 
         StatusResponse? body = await response.Content.ReadFromJsonAsync<StatusResponse>();
-
-        response.EnsureSuccessStatusCode();
 
         Assert.NotNull(body);
         Assert.Equal("ok", body.Status);
