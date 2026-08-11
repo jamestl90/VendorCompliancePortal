@@ -17,3 +17,8 @@ app.MapGet("/api/status", (IConfiguration config,
     }
 );
 app.Run();
+
+public partial class Program
+{
+    
+}
