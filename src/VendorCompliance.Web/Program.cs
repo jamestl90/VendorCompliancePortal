@@ -1,4 +1,3 @@
-using VenderCompliance.Web.Contracts;
 using VendorCompliance.Web.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
