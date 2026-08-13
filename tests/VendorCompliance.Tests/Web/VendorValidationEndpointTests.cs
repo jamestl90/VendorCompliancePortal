@@ -1,0 +1,40 @@
+using System.Net;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Mvc.Testing;
+using VenderCompliance.Web.Contracts;
+
+namespace VendorCompliance.Tests.Web;
+
+public sealed class VendorValidationEndpointTests(WebApplicationFactory<Program> factory)
+    : IClassFixture<WebApplicationFactory<Program>>
+{
+    private readonly HttpClient _client = factory.CreateClient();
+
+    [Fact]
+    public async Task VendorValidation_create_valid_post()
+    {
+        var request = new VendorValidationRequest(
+            Name: "Made Up Company",
+            ContactEmail: "compliance@madeupcompany.com");
+
+        using HttpResponseMessage response = await _client.PostAsJsonAsync(
+            "/api/vendors/validate",
+            request);
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    } 
+
+    [Fact]
+    public async Task VendorValidation_create_invalid_post()
+    {
+        var request = new VendorValidationRequest(
+            Name: "Made Up Company",
+            ContactEmail: "not an email!");
+            
+        using HttpResponseMessage response = await _client.PostAsJsonAsync(
+            "/api/vendors/validate",
+            request);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+}
