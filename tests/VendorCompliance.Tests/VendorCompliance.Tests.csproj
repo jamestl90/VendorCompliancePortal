@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\src\VendorCompliance.Domain\VendorCompliance.Domain.csproj" />
     <ProjectReference Include="..\..\src\VendorCompliance.Application\VendorCompliance.Application.csproj" />
     <ProjectReference Include="..\..\src\VendorCompliance.Web\VendorCompliance.Web.csproj" />
+    <ProjectReference Include="..\..\src\VendorCompliance.Infrastructure\VendorCompliance.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
