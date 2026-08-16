@@ -57,7 +57,7 @@ app.MapPost("/api/vendors", async Task<IResult> (
     VendorComplianceDbContext dbContext,
     CancellationToken ct) =>
 {
-    var vendor = new Vendor(Guid.NewGuid(), request.Name);   
+    var vendor = new Vendor(Guid.NewGuid(), request.Name);
 
     dbContext.Vendors.Add(vendor);
     await dbContext.SaveChangesAsync(ct);
@@ -74,7 +74,7 @@ app.MapGet("/api/vendors/{id:guid}", async Task<IResult> (
 {
     Vendor? vendor = await dbContext.Vendors.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id, ct);
 
-    return vendor is null ? Results.NotFound() : Results.Ok(new VendorResponse(vendor.Id, vendor.Name));   
+    return vendor is null ? Results.NotFound() : Results.Ok(new VendorResponse(vendor.Id, vendor.Name)); 
 });
 
 app.Run();
