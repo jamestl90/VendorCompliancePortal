@@ -1,4 +1,6 @@
 using VendorCompliance.Web.Contracts;
+using Microsoft.EntityFrameworkCore;
+using VendorCompliance.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpLogging();
 builder.Services.AddValidation();
 builder.Services.AddProblemDetails();
+
+// add database connection
+string connectionString = builder.Configuration.GetConnectionString("VendorCompliance") ??
+                                                    throw new InvalidOperationException(
+                                                    "Connection string 'VendorCompliance' is not configured.");
+
+builder.Services.AddDbContext<VendorComplianceDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 

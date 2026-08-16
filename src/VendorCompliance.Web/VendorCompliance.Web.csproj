@@ -3,10 +3,15 @@
   <ItemGroup>
     <ProjectReference Include="..\VendorCompliance.Application\VendorCompliance.Application.csproj" />
     <ProjectReference Include="..\VendorCompliance.Domain\VendorCompliance.Domain.csproj" />
+    <ProjectReference Include="..\VendorCompliance.Infrastructure\VendorCompliance.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
   </ItemGroup>
 
