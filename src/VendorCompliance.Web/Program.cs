@@ -41,17 +41,6 @@ app.MapGet("/api/status", (IConfiguration config,
     ));
 });
 
-app.MapPost("/api/vendors/validate", (VendorValidationRequest request,
-                                     ILogger<Program> logger) =>
-{
-    // Just echoing it back for now
-    logger.LogInformation(
-            "Validated vendor request for {VendorName}",
-            request.Name);
-
-    return Results.Ok(request); 
-});
-
 app.MapPost("/api/vendors", async Task<IResult> (
     CreateVendorRequest request,
     VendorComplianceDbContext dbContext,
@@ -74,7 +63,7 @@ app.MapGet("/api/vendors/{id:guid}", async Task<IResult> (
 {
     Vendor? vendor = await dbContext.Vendors.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id, ct);
 
-    return vendor is null ? Results.NotFound() : Results.Ok(new VendorResponse(vendor.Id, vendor.Name)); 
+    return vendor is null ? Results.NotFound() : Results.Ok(new VendorResponse(vendor.Id, vendor.Name));
 });
 
 app.Run();
