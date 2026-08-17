@@ -60,10 +60,13 @@ system clock, which keeps tests and CI runs repeatable.
 | Area | Technology and practice |
 | --- | --- |
 | Runtime and language | .NET 10, C#, SDK-style projects, nullable reference types, implicit global usings |
-| Solution structure | XML-based `.slnx` solution, modular-monolith project boundaries, layered architecture with dependencies directed toward Domain |
+| Solution structure | XML-based `.slnx` solution, modular-monolith project boundaries, and separate Domain, Application, Infrastructure, Web, Prototype, and Tests projects |
 | Domain design | Encapsulated business rules, constructor injection, LINQ, result-oriented error handling, read-only result collections, deterministic date handling |
-| Automated testing | xUnit, Microsoft.NET.Test.Sdk, xUnit Visual Studio runner, Coverlet collector, Arrange/Act/Assert tests |
-| Continuous integration | GitHub Actions on Ubuntu: restore, Release build, and test on pushes and pull requests to `main`, plus manual runs |
+| Web application and APIs | ASP.NET Core Minimal APIs, dependency injection, configuration, validation, Problem Details, OpenAPI, HTTP logging, and asynchronous endpoints |
+| Data access | Entity Framework Core 10, Npgsql, PostgreSQL 18, `DbContext` mapping, code-first migrations, async persistence, and no-tracking queries |
+| Automated testing | xUnit, Microsoft.NET.Test.Sdk, xUnit Visual Studio runner, Coverlet collector, unit tests, and ASP.NET Core integration tests using `WebApplicationFactory` and PostgreSQL |
+| Containers | Docker Compose with a health-checked PostgreSQL development database |
+| Continuous integration | GitHub Actions on Ubuntu with a PostgreSQL service container, .NET tool restore, EF Core migration application, Release build, and tests on pushes and pull requests to `main`, plus manual runs |
 | Source control | Git feature branches and a pull-request workflow with CI checks before merge |
 
 ### Planned and not yet implemented
@@ -73,13 +76,11 @@ features already present in this repository:
 
 | Area | Planned technology |
 | --- | --- |
-| Web application | ASP.NET Core, Blazor Web App, Razor components |
-| HTTP APIs | ASP.NET Core endpoints, validation, OpenAPI |
-| Data access | Entity Framework Core (EF Core), PostgreSQL, migrations |
+| Web UI | Blazor Web App and Razor components |
 | Security | ASP.NET Core Identity, role- and policy-based authorization |
 | UI testing | bUnit component tests and broader integration tests |
-| Containers | OCI-compatible containers using Podman or Docker-compatible tooling |
-| Observability | Structured logging and OpenTelemetry |
+| Containers | An OCI-compatible application image and production container configuration |
+| Observability | OpenTelemetry tracing and metrics |
 | Delivery | Expanded GitHub Actions CI/CD, deployment artifacts and gates, optional Azure deployment |
 
 Amazon Elastic Container Service (AWS ECS) is not currently used. A deployment
