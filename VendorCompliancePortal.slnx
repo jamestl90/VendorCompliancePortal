@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/VendorCompliance.Application/VendorCompliance.Application.csproj" />
     <Project Path="src/VendorCompliance.Domain/VendorCompliance.Domain.csproj" />
+    <Project Path="src/VendorCompliance.Infrastructure/VendorCompliance.Infrastructure.csproj" />
     <Project Path="src/VendorCompliance.Prototype/VendorCompliance.Prototype.csproj" />
     <Project Path="src/VendorCompliance.Web/VendorCompliance.Web.csproj" />
   </Folder>
