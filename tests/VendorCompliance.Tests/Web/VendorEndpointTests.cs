@@ -59,8 +59,8 @@ public sealed class VendorEndpointTests(WebApplicationFactory<Program> factory)
     [Fact]
     public async Task GetVendor_WithUnknownId_ReturnNotFound()
     {
-        using HttpResponseMessage response = await _client.GetAsync($"/api/vendors/{Guid.NewGuid}");
-        
+        using HttpResponseMessage response = await _client.GetAsync($"/api/vendors/{Guid.NewGuid()}");
+
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
